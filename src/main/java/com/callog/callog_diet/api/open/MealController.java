@@ -1,7 +1,9 @@
 package com.callog.callog_diet.api.open;
 
+import com.callog.callog_diet.common.dto.ApiResponseDto;
 import com.callog.callog_diet.domain.MealType;
 import com.callog.callog_diet.domain.dto.meal.MealRequest;
+import com.callog.callog_diet.domain.dto.meal.MealResponse;
 import com.callog.callog_diet.service.MealService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -18,38 +21,54 @@ import java.time.LocalDate;
 public class MealController {
     private final MealService mealService;
 
-    // create: 식단 기록
-    // TODO: 반환값 공통 코드화
-    @PostMapping(value = "")
-    public String createMeal(@RequestBody MealRequest.MealCreateRequest request) {
+    // api 테스트
+    @GetMapping(value = "/test")
+    public ApiResponseDto<String> test() {
+        String response = "meal 테스트입니다.";
+        return ApiResponseDto.createOk(response);
+    }
 
-        return "";
+    // create: 식단 기록
+    @PostMapping(value = "")
+    public ApiResponseDto<MealResponse.CreateUpdateMealResponse> createMeal(@RequestBody MealRequest.MealCreateRequest request) {
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
+        MealResponse.CreateUpdateMealResponse response = mealService.createMeal(userId, request);
+        return ApiResponseDto.createOk(response);
     }
 
     // read: 특정 날짜 식단 기록 조회 (아침, 점심, 저녁 한번에)
     // TODO: 반환값 공통 코드화
     @GetMapping(value = "")
-    public String readDateMealList(@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ApiResponseDto<List<MealResponse.DateMealListResponse>> readDateMealList(
+            @RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date) {
         date = getOrToday(date);
-        // 서비스 호출
-        return "";
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
+        List<MealResponse.DateMealListResponse> response = mealService.readDateMealList(userId, date);
+        return ApiResponseDto.createOk(response);
     }
 
     // read: 특정 날짜 특정 mealType 식단 조회 (음식 수정 화면에서 사용 예정)
-    // TODO: 반환값 공통 코드화
     @GetMapping(value = "/type")
-    public String readDateMealTypeList(@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date,
-                                      @RequestParam MealType mealType) {
+    public ApiResponseDto<List<MealResponse.DateMealTypeListResponse>> readDateMealTypeList(
+            @RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam MealType mealType) {
         date = getOrToday(date);
-        // 서비스 호출
-        return "";
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
+        List<MealResponse.DateMealTypeListResponse> response = mealService.readDateMealTypeList(userId, date, mealType);
+        return ApiResponseDto.createOk(response);
     }
 
     // update: 식단 기록 수정
     // TODO: 반환값 공통 코드화
     @PatchMapping(value = "")
     public String updateMeal(@RequestBody MealRequest.MealUpdateRequest request) {
-
+        // request: {id, userId, amount}
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
+        //MealResponse.CreateUpdateMealResponse response = mealService.
         return "";
     }
 
@@ -57,6 +76,8 @@ public class MealController {
     // TODO: 반환값 공통 코드화
     @DeleteMapping(value = "/{mealId}")
     public String deleteMeal(@PathVariable Long mealId) {
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
         return "";
     }
 
