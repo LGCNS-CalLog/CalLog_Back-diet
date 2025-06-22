@@ -35,7 +35,7 @@ public class ApiResponseDto<T> {
         return ApiResponseDto.createOk(null);
     }
 
-    public static ApiResponseDto<String> createError(String code, String message) {
-        return new ApiResponseDto<>(code, message);
+    public static ApiResponseDto<String> createError(String errorCode, String message) {
+        return new ApiResponseDto<>(errorCode, message);
     }
 }
