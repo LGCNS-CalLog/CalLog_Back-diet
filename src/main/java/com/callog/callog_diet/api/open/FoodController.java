@@ -16,9 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/diet/food", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class FoodController {
-
-    @Autowired
-    FoodService foodService;
+    private final FoodService foodService;
 
     // api 테스트
     @GetMapping(value = "/test")

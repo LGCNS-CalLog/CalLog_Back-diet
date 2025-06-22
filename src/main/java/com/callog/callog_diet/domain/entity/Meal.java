@@ -1,9 +1,7 @@
 package com.callog.callog_diet.domain.entity;
 
 import com.callog.callog_diet.domain.MealType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,7 +10,8 @@ import java.time.LocalDate;
 @Data
 public class Meal {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private Long userId;
