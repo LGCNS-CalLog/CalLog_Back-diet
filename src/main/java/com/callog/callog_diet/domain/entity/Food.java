@@ -1,4 +1,4 @@
-package com.callog.callog_diet.domain;
+package com.callog.callog_diet.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -26,5 +26,4 @@ public class Food {
 
     @Column
     private double kcal;
-
 }

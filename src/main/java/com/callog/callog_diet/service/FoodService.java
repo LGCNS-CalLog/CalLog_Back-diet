@@ -1,6 +1,6 @@
 package com.callog.callog_diet.service;
 
-import com.callog.callog_diet.domain.Food;
+import com.callog.callog_diet.domain.entity.Food;
 import com.callog.callog_diet.domain.dto.food.FoodResponse;
 import com.callog.callog_diet.domain.repository.FoodRepository;
 import lombok.extern.slf4j.Slf4j;
