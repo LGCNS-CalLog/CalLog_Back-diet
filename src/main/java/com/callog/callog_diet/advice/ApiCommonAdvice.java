@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.nio.file.AccessDeniedException;
 
@@ -21,9 +20,9 @@ import java.nio.file.AccessDeniedException;
 @RestControllerAdvice
 public class ApiCommonAdvice {
     @ExceptionHandler(CustomException.class)
+
     public ResponseEntity<ApiResponseDto<String>> handleCustomException2(CustomException e) {
         ErrorCodeInterface errorCode = e.getErrorCode();
-
         return ResponseEntity
                 .status(errorCode.getStatus()) // HTTP status
                 .body(ApiResponseDto.createError(
