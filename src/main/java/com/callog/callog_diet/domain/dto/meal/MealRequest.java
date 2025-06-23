@@ -20,7 +20,7 @@ public class MealRequest {
         private MealType mealType;
         private Long foodId;
         private String foodName;
-        private Long amount;
+        private Double amount;
         // id 자동 생성
 
         public Meal toEntity(Long userId) {
@@ -41,8 +41,8 @@ public class MealRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MealUpdateRequest {
-        private String id;
-        private Long amount;
+        private Long id;
+        private Double amount;
         // id 기반 amount 수정만 지원
         // amount 기반 carbohydrate, protein, fat, kcal 재계산 수행
     }

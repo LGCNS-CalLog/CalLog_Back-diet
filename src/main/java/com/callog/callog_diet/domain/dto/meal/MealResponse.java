@@ -15,11 +15,11 @@ public class MealResponse {
         private MealType mealType;
         private Long foodId;
         private String foodName;
-        private Long amount;
-        private double carbohydrate;
-        private double protein;
-        private double fat;
-        private double kcal;
+        private Double amount;
+        private Double carbohydrate;
+        private Double protein;
+        private Double fat;
+        private Double kcal;
     }
 
     @Data
@@ -28,11 +28,11 @@ public class MealResponse {
         private Long id;
         private Long foodId;
         private String foodName;
-        private Long amount;
-        private double carbohydrate;
-        private double protein;
-        private double fat;
-        private double kcal;
+        private Double amount;
+        private Double carbohydrate;
+        private Double protein;
+        private Double fat;
+        private Double kcal;
     }
 
     @Data
@@ -43,10 +43,10 @@ public class MealResponse {
         private MealType mealType;
         private Long foodId;
         private String foodName;
-        private Long amount;
-        private double carbohydrate;
-        private double protein;
-        private double fat;
-        private double kcal;
+        private Double amount;
+        private Double carbohydrate;
+        private Double protein;
+        private Double fat;
+        private Double kcal;
     }
 }
