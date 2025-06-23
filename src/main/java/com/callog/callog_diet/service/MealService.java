@@ -14,7 +14,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,17 +30,25 @@ public class MealService {
         Food food = foodRepository.findById(request.getFoodId())
                 .orElseThrow(() -> new CustomException(FoodErrorCode.FOOD_NOT_FOUND));
         // [2] foodId의 foodName과 요청의 foodName이 다를 경우, DIET_INVALID_INPUT
-        if(!food.getName().equals(request.getFoodName())) {
+        if (!food.getName().equals(request.getFoodName())) {
             throw new CustomException(DietErrorCode.DIET_INVALID_INPUT);
         }
-        Meal meal = request.toEntity(userId);
+        // [3] 이미 존재하는 식단인지 확인 (date, mealType, foodId)
+        Optional<Meal> optionalMeal = mealRepository.findByUserIdAndDateAndMealTypeAndFoodId(
+                userId, request.getDate(), request.getMealType(), request.getFoodId());
 
-        // amount 기반 carbohydrate, protein, fat, kcal 계산 수행
-        Double amount = meal.getAmount();
-        meal.setCarbohydrate(amount * food.getCarbohydrate());
-        meal.setProtein(amount * food.getProtein());
-        meal.setFat(amount * food.getFat());
-        meal.setKcal(amount * food.getKcal());
+        Meal meal;
+        Double amount;
+        // [3-1] date, mealType, foodId ▶ 이미 존재할 경우, 양 추가
+        if (optionalMeal.isPresent()) {
+            meal = optionalMeal.get();
+            amount = meal.getAmount() + request.getAmount();
+        } else {  // [3-2] 없을 경우, 새 식단 추가
+            meal = request.toEntity(userId);
+            amount = request.getAmount();
+        }
+
+        applyNutrition(meal, food, amount);
 
         Meal m = mealRepository.save(meal);
         return MealResponse.CreateUpdateMealResponse.builder()
@@ -52,6 +63,19 @@ public class MealService {
                 .fat(m.getFat())
                 .kcal(m.getKcal())
                 .build();
+    }
+
+    public List<LocalDate> readMonthMealList(Long userId, YearMonth yearMonth) {
+        LocalDate startDate = yearMonth.atDay(1); // 해당 월의 첫날
+        LocalDate endDate = yearMonth.atEndOfMonth(); // 해당 월의 마지막 날
+
+        List<Meal> meals = mealRepository.findAllByUserIdAndDateBetween(userId, startDate, endDate);
+
+        return meals.stream()
+                .map(Meal::getDate)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public List<MealResponse.DateMealListResponse> readDateMealList(Long userId, LocalDate date) {
@@ -101,11 +125,7 @@ public class MealService {
             throw new CustomException(DietErrorCode.DIET_FORBIDDEN);
         }
         Double amount = request.getAmount();
-        meal.setAmount(amount);
-        meal.setCarbohydrate(food.getCarbohydrate() * amount);
-        meal.setProtein(food.getProtein() * amount);
-        meal.setFat(food.getFat() * amount);
-        meal.setKcal(food.getKcal() * amount);
+        applyNutrition(meal, food, amount);
         mealRepository.save(meal);
 
         return MealResponse.CreateUpdateMealResponse.builder()
@@ -122,15 +142,23 @@ public class MealService {
                 .build();
     }
 
-    public void deleteMeal(Long userId, Long mealId) {
+    public void deleteMeal(Long userId, MealRequest.MealDeleteRequest request) {
         // [1] 유효하지 않은 mealId일 경우, DIET_NOT_FOUND
-        Meal meal = mealRepository.findById(mealId)
+        Meal meal = mealRepository.findById(request.getMealId())
                 .orElseThrow(() -> new CustomException(DietErrorCode.DIET_NOT_FOUND));
         // [2] 로그인 사용자의 식단 기록이 아닌 경우, DIET_FORBIDDEN
         if(meal.getUserId() == null || !meal.getUserId().equals(userId)) {
             throw new CustomException(DietErrorCode.DIET_FORBIDDEN);
         }
-        mealRepository.deleteById(mealId);
+        mealRepository.deleteById(request.getMealId());
+    }
+
+    private void applyNutrition(Meal meal, Food food, double amount) {
+        meal.setAmount(amount);
+        meal.setCarbohydrate(food.getCarbohydrate() * amount);
+        meal.setProtein(food.getProtein() * amount);
+        meal.setFat(food.getFat() * amount);
+        meal.setKcal(food.getKcal() * amount);
     }
 
 }
