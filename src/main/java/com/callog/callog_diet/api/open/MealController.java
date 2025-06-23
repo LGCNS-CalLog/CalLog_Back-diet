@@ -38,7 +38,6 @@ public class MealController {
     }
 
     // read: 특정 날짜 식단 기록 조회 (아침, 점심, 저녁 한번에)
-    // TODO: 반환값 공통 코드화
     @GetMapping(value = "")
     public ApiResponseDto<List<MealResponse.DateMealListResponse>> readDateMealList(
             @RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -62,23 +61,22 @@ public class MealController {
     }
 
     // update: 식단 기록 수정
-    // TODO: 반환값 공통 코드화
     @PatchMapping(value = "")
-    public String updateMeal(@RequestBody MealRequest.MealUpdateRequest request) {
+    public ApiResponseDto<MealResponse.CreateUpdateMealResponse> updateMeal(@RequestBody MealRequest.MealUpdateRequest request) {
         // request: {id, userId, amount}
         // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
         Long userId = 0L;
-        //MealResponse.CreateUpdateMealResponse response = mealService.
-        return "";
+        MealResponse.CreateUpdateMealResponse response = mealService.updateMeal(userId, request);
+        return ApiResponseDto.createOk(response);
     }
 
     // delete: 식단 기록 삭제
-    // TODO: 반환값 공통 코드화
     @DeleteMapping(value = "/{mealId}")
-    public String deleteMeal(@PathVariable Long mealId) {
+    public ApiResponseDto<String> deleteMeal(@PathVariable Long mealId) {
         // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
         Long userId = 0L;
-        return "";
+        mealService.deleteMeal(userId, mealId);
+        return ApiResponseDto.defaultOk();
     }
 
     // Date Null일 경우, 오늘 날짜 주입
