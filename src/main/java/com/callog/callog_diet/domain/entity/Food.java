@@ -13,17 +13,17 @@ public class Food {
     private String name;
 
     @Column(nullable = false)
-    private double defaultAmount;
+    private Double defaultAmount;
 
     @Column
-    private double carbohydrate;
+    private Double carbohydrate;
 
     @Column
-    private double protein;
+    private Double protein;
 
     @Column
-    private double fat;
+    private Double fat;
 
     @Column
-    private double kcal;
+    private Double kcal;
 }
