@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode implements ErrorCodeInterface{
     // 400
     INVALID_INPUT("COMMON400", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    MISSING_REQUIRED_FIELD("DIET400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
+    MISSING_REQUIRED_FIELD("COMMON400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
 
     // 401
     UNAUTHORIZED("COMMON401", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),

@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum DietErrorCode implements ErrorCodeInterface{
     // 400
-    DIET_INVALID_INPUT("DIET400", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    MISSING_REQUIRED_FIELD("DIET400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
+    DIET_INVALID_INPUT("DIET400", "잘못된 요청입니다. ", HttpStatus.BAD_REQUEST),
+    DIET_MISSING_REQUIRED_FIELD("DIET400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
 
     // 401
     DIET_UNAUTHORIZED("DIET401", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
 
     // 403
-    DIET_FORBIDDEN("DIET403", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    DIET_FORBIDDEN("DIET403", "접근 권한이 없습니다. 자신의 식단인지 확인해주세요.", HttpStatus.FORBIDDEN),
 
     // 404
     DIET_NOT_FOUND("DIET404", "해당 식단 기록을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

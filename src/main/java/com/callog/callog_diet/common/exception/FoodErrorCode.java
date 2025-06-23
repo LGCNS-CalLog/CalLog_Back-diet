@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum FoodErrorCode implements ErrorCodeInterface{
     // 400
     FOOD_INVALID_INPUT("FOOD400", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    MISSING_REQUIRED_FIELD("FOOD400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
+    FOOD_MISSING_REQUIRED_FIELD("FOOD400", "필수 항목이 누락되었습니다.", HttpStatus.BAD_REQUEST),
 
     // 401
     FOOD_UNAUTHORIZED("FOOD401", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
