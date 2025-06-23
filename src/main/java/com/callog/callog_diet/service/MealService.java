@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.callog.callog_diet.common.exception.DietErrorCode.DIET_FORBIDDEN;
-
 @Service
 @AllArgsConstructor
 public class MealService {
