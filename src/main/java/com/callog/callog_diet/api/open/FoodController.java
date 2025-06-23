@@ -26,9 +26,9 @@ public class FoodController {
 
     // 음식 검색
     @GetMapping(value = "")
-    public ApiResponseDto<List<FoodResponse.FoodListResponse>> food(@RequestParam(required = false) String search) {
+    public ApiResponseDto<FoodResponse.FoodListWithCountResponse> food(@RequestParam(required = false) String search) {
         log.info("foodController: /food 호출 {}", search);
-        List<FoodResponse.FoodListResponse> foodList = foodService.getFoodList(search);
+        FoodResponse.FoodListWithCountResponse foodList = foodService.getFoodListWithCount(search);
         return ApiResponseDto.createOk(foodList);
     }
 }
