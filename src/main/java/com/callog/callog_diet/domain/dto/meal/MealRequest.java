@@ -46,4 +46,12 @@ public class MealRequest {
         // id 기반 amount 수정만 지원
         // amount 기반 carbohydrate, protein, fat, kcal 재계산 수행
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MealDeleteRequest {
+        private Long mealId;
+    }
 }

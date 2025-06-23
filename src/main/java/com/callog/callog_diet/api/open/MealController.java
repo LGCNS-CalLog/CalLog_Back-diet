@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @Slf4j
@@ -34,6 +35,17 @@ public class MealController {
         // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
         Long userId = 0L;
         MealResponse.CreateUpdateMealResponse response = mealService.createMeal(userId, request);
+        return ApiResponseDto.createOk(response);
+    }
+
+    // read: 식단 기록 전체 조회 (달력, 월단위)
+    @GetMapping(value="/all")
+    public ApiResponseDto<List<LocalDate>> readMonthMealList(
+            @RequestParam(required = false) YearMonth yearMonth){
+        yearMonth = getOrCurrentMonth(yearMonth);
+        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
+        Long userId = 0L;
+        List<LocalDate> response = mealService.readMonthMealList(userId, yearMonth);
         return ApiResponseDto.createOk(response);
     }
 
@@ -61,7 +73,7 @@ public class MealController {
     }
 
     // update: 식단 기록 수정
-    @PatchMapping(value = "")
+    @PostMapping(value = "/update")
     public ApiResponseDto<MealResponse.CreateUpdateMealResponse> updateMeal(@RequestBody MealRequest.MealUpdateRequest request) {
         // request: {id, userId, amount}
         // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
@@ -71,11 +83,11 @@ public class MealController {
     }
 
     // delete: 식단 기록 삭제
-    @DeleteMapping(value = "/{mealId}")
-    public ApiResponseDto<String> deleteMeal(@PathVariable Long mealId) {
+    @PostMapping(value = "/delete")
+    public ApiResponseDto<String> deleteMeal(@RequestBody MealRequest.MealDeleteRequest request) {
         // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
         Long userId = 0L;
-        mealService.deleteMeal(userId, mealId);
+        mealService.deleteMeal(userId, request);
         return ApiResponseDto.defaultOk();
     }
 
@@ -84,5 +96,9 @@ public class MealController {
         return (date != null) ? date : LocalDate.now();
     }
 
-    // read: 식단 기록 전체 조회 (달력, 월단위) (보류)
+    private YearMonth getOrCurrentMonth(YearMonth yearMonth) {
+        return (yearMonth != null) ? yearMonth : YearMonth.now();
+    }
+
+
 }
