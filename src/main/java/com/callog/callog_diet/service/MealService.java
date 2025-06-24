@@ -12,6 +12,7 @@ import com.callog.callog_diet.domain.repository.FoodRepository;
 import com.callog.callog_diet.domain.repository.MealRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -25,6 +26,7 @@ public class MealService {
     private final MealRepository mealRepository;
     private final FoodRepository foodRepository;
 
+    @Transactional
     public MealResponse.CreateUpdateMealResponse createMeal(Long userId, MealRequest.MealCreateRequest request) {
         // [1] 유효하지 않은 foodId일 경우, FOOD_NOT_FOUND
         Food food = foodRepository.findById(request.getFoodId())
@@ -113,6 +115,7 @@ public class MealService {
                 ).toList();
     }
 
+    @Transactional
     public MealResponse.CreateUpdateMealResponse updateMeal(Long userId, MealRequest.MealUpdateRequest request) {
         // [1] 유효하지 않은 mealId일 경우, DIET_NOT_FOUND
         Meal meal = mealRepository.findById(request.getId())
@@ -142,6 +145,7 @@ public class MealService {
                 .build();
     }
 
+    @Transactional
     public void deleteMeal(Long userId, MealRequest.MealDeleteRequest request) {
         // [1] 유효하지 않은 mealId일 경우, DIET_NOT_FOUND
         Meal meal = mealRepository.findById(request.getMealId())
