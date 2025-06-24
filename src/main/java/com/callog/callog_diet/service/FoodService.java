@@ -46,7 +46,7 @@ public class FoodService {
         List<Food> foodList;
 
         if (search == null || search.isBlank()) {
-            foodList = new ArrayList<>();
+            foodList = foodRepository.findAll();
             log.info("search 공백");
         } else {
             foodList = foodRepository.findByNameContaining(search);
@@ -61,6 +61,8 @@ public class FoodService {
                         .protein(food.getProtein())
                         .fat(food.getFat())
                         .kcal(food.getKcal())
+                        .sugar(food.getSugar())
+                        .fiber(food.getFiber())
                         .build())
                 .collect(Collectors.toList());
 

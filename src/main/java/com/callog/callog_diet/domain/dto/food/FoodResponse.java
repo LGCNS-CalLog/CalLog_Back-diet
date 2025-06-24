@@ -17,6 +17,8 @@ public class FoodResponse {
         private Double protein;
         private Double fat;
         private Double kcal;
+        private Double sugar;
+        private Double fiber;
     }
 
     @Data

@@ -26,4 +26,10 @@ public class Food {
 
     @Column
     private Double kcal;
+
+    @Column
+    private Double sugar;
+
+    @Column
+    private Double fiber;
 }

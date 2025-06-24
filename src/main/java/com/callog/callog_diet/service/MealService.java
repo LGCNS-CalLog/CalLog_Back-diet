@@ -31,11 +31,7 @@ public class MealService {
         // [1] 유효하지 않은 foodId일 경우, FOOD_NOT_FOUND
         Food food = foodRepository.findById(request.getFoodId())
                 .orElseThrow(() -> new CustomException(FoodErrorCode.FOOD_NOT_FOUND));
-        // [2] foodId의 foodName과 요청의 foodName이 다를 경우, DIET_INVALID_INPUT
-        if (!food.getName().equals(request.getFoodName())) {
-            throw new CustomException(DietErrorCode.DIET_INVALID_INPUT);
-        }
-        // [3] 이미 존재하는 식단인지 확인 (date, mealType, foodId)
+        // [2] 이미 존재하는 식단인지 확인 (date, mealType, foodId)
         Optional<Meal> optionalMeal = mealRepository.findByUserIdAndDateAndMealTypeAndFoodId(
                 userId, request.getDate(), request.getMealType(), request.getFoodId());
 
@@ -46,7 +42,8 @@ public class MealService {
             meal = optionalMeal.get();
             amount = meal.getAmount() + request.getAmount();
         } else {  // [3-2] 없을 경우, 새 식단 추가
-            meal = request.toEntity(userId);
+            String foodName = getFoodNameById(request.getFoodId());
+            meal = request.toEntity(userId, foodName);
             amount = request.getAmount();
         }
 
@@ -64,6 +61,8 @@ public class MealService {
                 .protein(m.getProtein())
                 .fat(m.getFat())
                 .kcal(m.getKcal())
+                .sugar(m.getSugar())
+                .fiber(m.getFiber())
                 .build();
     }
 
@@ -94,6 +93,8 @@ public class MealService {
                         .protein(m.getProtein())
                         .fat(m.getFat())
                         .kcal(m.getKcal())
+                        .sugar(m.getSugar())
+                        .fiber(m.getFiber())
                         .build()
                 ).toList();
     }
@@ -111,6 +112,8 @@ public class MealService {
                         .protein(m.getProtein())
                         .fat(m.getFat())
                         .kcal(m.getKcal())
+                        .sugar(m.getSugar())
+                        .fiber(m.getFiber())
                         .build()
                 ).toList();
     }
@@ -142,6 +145,8 @@ public class MealService {
                 .protein(meal.getProtein())
                 .fat(meal.getFat())
                 .kcal(meal.getKcal())
+                .sugar(meal.getSugar())
+                .fiber(meal.getFiber())
                 .build();
     }
 
@@ -163,6 +168,14 @@ public class MealService {
         meal.setProtein(food.getProtein() * amount);
         meal.setFat(food.getFat() * amount);
         meal.setKcal(food.getKcal() * amount);
+        meal.setSugar(food.getSugar() * amount);
+        meal.setFiber(food.getFiber() * amount);
+    }
+
+    public String getFoodNameById(Long foodId) {
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new CustomException(FoodErrorCode.FOOD_NOT_FOUND));
+        return food.getName();
     }
 
 }
