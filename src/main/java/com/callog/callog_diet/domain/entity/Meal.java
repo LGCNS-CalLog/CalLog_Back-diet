@@ -43,4 +43,10 @@ public class Meal {
 
     @Column
     private Double kcal;
+
+    @Column
+    private Double sugar;
+
+    @Column
+    private Double fiber;
 }

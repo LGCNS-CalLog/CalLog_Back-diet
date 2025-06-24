@@ -23,13 +23,13 @@ public class MealRequest {
         private Double amount;
         // id 자동 생성
 
-        public Meal toEntity(Long userId) {
+        public Meal toEntity(Long userId, String foodName) {
             Meal meal = new Meal();
             meal.setUserId(userId);
             meal.setDate(this.date);
             meal.setMealType(this.mealType);
             meal.setFoodId(this.foodId);
-            meal.setFoodName(this.foodName);
+            meal.setFoodName(foodName);
             meal.setAmount(this.amount);
 
             return meal;

@@ -20,6 +20,8 @@ public class MealResponse {
         private Double protein;
         private Double fat;
         private Double kcal;
+        private Double sugar;
+        private Double fiber;
     }
 
     @Data
@@ -33,6 +35,8 @@ public class MealResponse {
         private Double protein;
         private Double fat;
         private Double kcal;
+        private Double sugar;
+        private Double fiber;
     }
 
     @Data
@@ -48,5 +52,7 @@ public class MealResponse {
         private Double protein;
         private Double fat;
         private Double kcal;
+        private Double sugar;
+        private Double fiber;
     }
 }
