@@ -23,8 +23,10 @@ public class FoodService {
     public Page<FoodResponse.FoodListResponse> getFoodListWithCount(String search, Pageable pageable) {
         log.info("foodService getFoodList 호출 {}", search);
         Page<Food> foodList;
-
-
+        // findBy00Containing에 null값 들어갈 경우, 결측치 반환 ▶ null 공백화 필요
+        if(search == null) {
+            search = "";
+        }
         foodList = foodRepository.findByNameContaining(search,pageable);
        return convertFoodPageToFoodListResponsePage(foodList,pageable);
 
