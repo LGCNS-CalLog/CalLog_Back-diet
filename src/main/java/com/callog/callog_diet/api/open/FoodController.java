@@ -33,7 +33,10 @@ public class FoodController {
         Pageable sortPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                pageable.getSort().and(Sort.by("name").ascending()) // Combine existing sort with default 'id' asc
+//                pageable.getSort().and(Sort.by("name").ascending()) // Combine existing sort with default 'id' asc
+                pageable.getSort()
+                        .and(Sort.by("name").ascending())
+                        .and(Sort.by("id").ascending())
         );
         Page<FoodResponse.FoodListResponse> foodList = foodService.getFoodListWithCount(search,sortPageable);
         return ApiResponseDto.createOk(foodList);
