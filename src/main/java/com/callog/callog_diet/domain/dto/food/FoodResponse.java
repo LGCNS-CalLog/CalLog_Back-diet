@@ -2,6 +2,7 @@ package com.callog.callog_diet.domain.dto.food;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,12 +20,5 @@ public class FoodResponse {
         private Double kcal;
         private Double sugar;
         private Double fiber;
-    }
-
-    @Data
-    @Builder
-    public static class FoodListWithCountResponse {
-        private int totalCount;
-        private List<FoodListResponse> foodList;
     }
 }
