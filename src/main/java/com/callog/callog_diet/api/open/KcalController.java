@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,9 +31,7 @@ public class KcalController {
     // 회원 섭취 칼로리 하루 단위(아침, 점심, 저녁 총 칼로리 합계)
     // (현재 날짜 - 6) ~ 현재 날짜
     @GetMapping(value = "")
-    public ApiResponseDto<List<KcalResponse.KcalListResponse>> getCalorieIntakeTrend() {
-        // TODO: API Gateway 필터로 사용자 정보 받아오기 (일단 하드코딩)
-        Long userId = 1L;
+    public ApiResponseDto<List<KcalResponse.KcalListResponse>> getCalorieIntakeTrend(@RequestHeader("X-Auth-User-Id") Long userId) {
         List<KcalResponse.KcalListResponse> response = kcalService.getCalorieIntakeTrend(userId);
         return ApiResponseDto.createOk(response);
     }
