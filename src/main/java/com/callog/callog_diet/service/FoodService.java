@@ -5,6 +5,9 @@ import com.callog.callog_diet.domain.dto.food.FoodResponse;
 import com.callog.callog_diet.domain.repository.FoodRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,42 +20,17 @@ public class FoodService {
     @Autowired
     FoodRepository foodRepository;
 
-    public List<FoodResponse.FoodListResponse> getFoodList(String search) {
+    public Page<FoodResponse.FoodListResponse> getFoodListWithCount(String search, Pageable pageable) {
         log.info("foodService getFoodList 호출 {}", search);
-        List<Food> foodList;
+        Page<Food> foodList;
 
-        if (search == null || search.isBlank()) {
-            foodList = new ArrayList<>();
-            log.info("search 공백");
-;        } else {
-            foodList = foodRepository.findByNameContaining(search);
-        }
 
-        return foodList.stream()
-                .map(food -> FoodResponse.FoodListResponse.builder()
-                        .id(food.getId())
-                        .name(food.getName())
-                        .defaultAmount(food.getDefaultAmount())
-                        .carbohydrate(food.getCarbohydrate())
-                        .protein(food.getProtein())
-                        .fat(food.getFat())
-                        .kcal(food.getKcal())
-                        .build())
-                .collect(Collectors.toList());
+        foodList = foodRepository.findByNameContaining(search,pageable);
+       return convertFoodPageToFoodListResponsePage(foodList,pageable);
+
     }
-
-    public FoodResponse.FoodListWithCountResponse getFoodListWithCount(String search) {
-        log.info("foodService getFoodList 호출 {}", search);
-        List<Food> foodList;
-
-        if (search == null || search.isBlank()) {
-            foodList = foodRepository.findAll();
-            log.info("search 공백");
-        } else {
-            foodList = foodRepository.findByNameContaining(search);
-        }
-
-        List<FoodResponse.FoodListResponse> responseList = foodList.stream()
+    public Page<FoodResponse.FoodListResponse> convertFoodPageToFoodListResponsePage(Page<Food> foodPage, Pageable pageable) {
+        List<FoodResponse.FoodListResponse> foodListResponses = foodPage.getContent().stream()
                 .map(food -> FoodResponse.FoodListResponse.builder()
                         .id(food.getId())
                         .name(food.getName())
@@ -66,10 +44,6 @@ public class FoodService {
                         .build())
                 .collect(Collectors.toList());
 
-        return FoodResponse.FoodListWithCountResponse.builder()
-                .totalCount(responseList.size())
-                .foodList(responseList)
-                .build();
+        return new PageImpl<>(foodListResponses, pageable, foodPage.getTotalElements());
     }
-
 }

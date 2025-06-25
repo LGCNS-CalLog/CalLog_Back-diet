@@ -18,7 +18,7 @@ public enum ErrorCode implements ErrorCodeInterface{
     FORBIDDEN("COMMON403", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 
     // 404
-    NOT_FOUND("COMMON404", "해당 식단 기록을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND("COMMON404", "리소스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 500
     INTERNAL_ERROR("COMMON500", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -5,6 +5,10 @@ import com.callog.callog_diet.domain.dto.food.FoodResponse;
 import com.callog.callog_diet.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +28,14 @@ public class FoodController {
 
     // 음식 검색
     @GetMapping(value = "")
-    public ApiResponseDto<FoodResponse.FoodListWithCountResponse> food(@RequestParam(required = false) String search) {
+    public ApiResponseDto<Page<FoodResponse.FoodListResponse>> food(@RequestParam(required = false) String search, Pageable pageable) {
         log.info("foodController: /food 호출 {}", search);
-        FoodResponse.FoodListWithCountResponse foodList = foodService.getFoodListWithCount(search);
+        Pageable sortPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSort().and(Sort.by("kcal").ascending()) // Combine existing sort with default 'id' asc
+        );
+        Page<FoodResponse.FoodListResponse> foodList = foodService.getFoodListWithCount(search,sortPageable);
         return ApiResponseDto.createOk(foodList);
     }
 }
